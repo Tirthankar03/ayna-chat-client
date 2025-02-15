@@ -15,6 +15,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { FormattedDate } from "@/components/formatted-date"
 
 interface ChatSession {
   id: string
@@ -56,9 +57,10 @@ export function ChatSidebar() {
                   <SidebarMenuButton className="justify-between">
                     <span className="truncate">{session.title}</span>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground">
-                        {format(new Date(session.updated_at), "MMM d")}
-                      </span>
+                      <FormattedDate 
+                        date={session.updated_at} 
+                        className="text-xs text-muted-foreground"
+                      />
                       <Button
                         variant="ghost"
                         size="icon"

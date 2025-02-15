@@ -1,4 +1,4 @@
-'use client'
+
 import { AppSidebar } from "@/components/app-sidebar"
 import PlusButton from "@/components/plus-button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -28,6 +28,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { LogoutButton } from "@/components/LogoutButton"
 
 export default function Page() {
   return (
@@ -57,10 +58,7 @@ export default function Page() {
                 <ProfileDialog />
               </div>
               <Separator />
-              <div className="flex items-center gap-2 px-2 py-3 rounded-md hover:bg-secondary transition-colors cursor-pointer text-red-600">
-                <LogOut className="h-4 w-4" />
-                <span>Logout</span>
-              </div>
+              <LogoutButton/>
             </div>
           </PopoverContent>
         </Popover>
