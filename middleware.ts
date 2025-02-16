@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
   
   const user = await getUserMeLoader();
 
-  // console.log('user in middleware>>>>>', user)
+  console.log('user in middleware>>>>>', user)
   const currentPath = request.nextUrl.pathname;
 
   if (currentPath.startsWith("/chat") && user.ok === false) {
