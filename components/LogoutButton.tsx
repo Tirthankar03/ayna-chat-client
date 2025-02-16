@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { logoutUser } from "@/store/userSlice";
 import { LogOut } from "lucide-react";
 import { useTransition } from "react";
-import { logoutAction } from "@/actions/logout";
+import { logoutAction } from "@/actions/auth.actions";
 
 export function LogoutButton() {
   const router = useRouter();
