@@ -1,21 +1,23 @@
 "use server"
 
 import { getAuthToken } from "@/services/get-auth-token";
+import { extractUserDataFromToken } from "@/services/token-data";
 import { getUserMeLoader } from "@/services/user-me-loader";
 import { revalidateTag } from "next/cache";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:1337";
 
-export async function createChatSession(title: string) {
+export async function createChatSession() {
   try {
     const authToken = await getAuthToken();
 
-    const {data} = await getUserMeLoader();
+    const userId = await extractUserDataFromToken();
 
-    console.log('data>>>>>', data)
+    if (!userId) {
+      throw new Error("User data not found in token");
+    }
 
-    if(!data.id) throw new Error('User not Found')
-    
+
     const response = await fetch(`${API_URL}/api/sessions`, {
       method: "POST",
       headers: {
@@ -23,7 +25,9 @@ export async function createChatSession(title: string) {
         Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
-          title
+        data: {
+          user: userId
+        }
       }),
     });
     
@@ -89,14 +93,18 @@ export async function renameChatSession(sessionId: string, title: string) {
 
     revalidateTag("session");
 
-    const response = await fetch(`${API_URL}/api/sessions/${sessionId}/rename`, {
+    
+
+    const response = await fetch(`${API_URL}/api/sessions/${sessionId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
-        title,
+        data: {
+          title
+        }
       }),
     });
 
@@ -105,6 +113,8 @@ export async function renameChatSession(sessionId: string, title: string) {
     }
 
     return await response.json();
+
+    return;
   } catch (error) {
     console.error("Error renaming client session:", error);
     throw error;

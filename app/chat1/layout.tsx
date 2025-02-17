@@ -1,0 +1,97 @@
+
+import { AppSidebar } from "@/components/app-sidebar"
+import PlusButton from "@/components/plus-button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Separator } from "@/components/ui/separator"
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
+import { Plus, UserCircle, LogOut } from "lucide-react"
+import { ProfileDialog } from "@/components/profile-dialog"
+import { ChatArea } from "@/components/chat-area"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { LogoutButton } from "@/components/LogoutButton"
+
+
+
+
+export default async function RootLayout({
+    children,
+}: Readonly<{
+    children: React.ReactNode;
+}>) {
+    // const userCartDetails = await getAllCart();
+
+    // // Initialize cartItemCount to 0 as a default value
+    // let cartItemCount = 0;
+  
+    // // Check if the data and products are available
+    // if (userCartDetails?.data && Array.isArray(userCartDetails.data.products)) {
+    //   cartItemCount = userCartDetails.data.products.length;
+    // }
+  
+    // console.log(userCartDetails);
+    // console.log("cartItemCount>>>>>", cartItemCount);
+
+    //make API call here
+  
+    return (
+        <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <header className="flex h-16 shrink-0 items-center justify-between gap-2 px-4">
+            <div className="flex gap-2 items-center ">
+              <SidebarTrigger className="-ml-1" />
+              <Separator orientation="vertical" className=" h-4" />
+              <PlusButton/>
+            </div>
+            
+            {/* <ProfileDialog /> */}
+  
+  
+          <Popover>
+            <PopoverTrigger>
+              <Avatar>
+                <AvatarFallback className="bg-primary/30 cursor-pointer">T</AvatarFallback>
+              </Avatar>
+            </PopoverTrigger>
+            <PopoverContent className="w-56">
+              <div className="flex flex-col gap-3 ">
+                <div className="flex items-center gap-2 px-2 py-3 rounded-md hover:bg-secondary transition-colors cursor-pointer">
+                  <UserCircle className="h-4 w-4" />
+                  <ProfileDialog />
+                </div>
+                <Separator />
+                <LogoutButton/>
+              </div>
+            </PopoverContent>
+          </Popover>
+  
+            
+          </header>
+          <div className="flex flex-1 flex-col">
+            {/* <ChatArea /> */}
+            {children}
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
+    );
+}

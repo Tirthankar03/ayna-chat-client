@@ -14,12 +14,17 @@ interface Message {
   content: string
 }
 
-export function ChatArea() {
+type ChatProps = {
+  sessionId: string
+}
+
+export function ChatArea({sessionId}: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       role: "user",
-      content: "Hello there!",
+      content: `${sessionId}`,
+
     },
     {
       id: "2",

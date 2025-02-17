@@ -1,5 +1,6 @@
 import { getAuthToken } from "@/services/get-auth-token";
-
+import { extractUserDataFromToken } from "@/services/token-data";
+import qs from "qs"
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:1337";
 
 
@@ -7,9 +8,25 @@ const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:1337";
 export async function fetchUserSessions() {
   try {
     const authToken = await getAuthToken();
-    const response = await fetch(`${API_URL}/api/sessions?populate=user&sort=updatedAt:desc`, {
+    const userId = await extractUserDataFromToken();
+
+    if (!userId) {
+      throw new Error("User data not found in token");
+    }
+
+    const query = qs.stringify({
+      populate: 'user',
+      sort: ['updatedAt:desc'],
+      filters: {
+        user: {
+          id: {
+            $eq: userId
+          }
+        }
+      }
+    }, { encodeValuesOnly: true });
+    const response = await fetch(`${API_URL}/api/sessions?${query}`, {
       next: {
-        revalidate: 1,
         tags: ['session'],
       },
       headers: {
@@ -25,11 +42,7 @@ export async function fetchUserSessions() {
 
     // console.log("data in fetchUserSessions>>>>>>>", data)
 
-    return data.map((session: any) => ({
-      id: session.id,
-      title: session.title,
-      updated_at: session.updatedAt,
-    }));
+    return data
   } catch (error) {
     console.error("Error fetching sessions:", error);
     return [];
