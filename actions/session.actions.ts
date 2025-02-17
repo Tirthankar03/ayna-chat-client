@@ -2,7 +2,6 @@
 
 import { getAuthToken } from "@/services/get-auth-token";
 import { extractUserDataFromToken } from "@/services/token-data";
-import { getUserMeLoader } from "@/services/user-me-loader";
 import { revalidateTag } from "next/cache";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:1337";

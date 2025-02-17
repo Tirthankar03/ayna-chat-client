@@ -17,9 +17,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { LogoutButton } from "@/components/LogoutButton"
+import { getMessagesBySessionId } from "@/lib/api"
 
-export default  function Page({searchParams} : {searchParams: {id: string}}) {
-    const {id} =  searchParams;
+export default async  function Page({searchParams} : {searchParams: {id: string}}) {
+    const {id} = await searchParams;
+
+    console.log("id>>>>", id)
+
+    const messages = await getMessagesBySessionId(id)
+
+    console.log("messages>>>>", messages)
   return (
     <SidebarProvider>
       <AppSidebar sessionId={id}/>
@@ -55,7 +62,8 @@ export default  function Page({searchParams} : {searchParams: {id: string}}) {
           
         </header>
         <div className="flex flex-1 flex-col">
-          <ChatArea sessionId={id}/>
+          {id != undefined ? <ChatArea sessionId={id} messages={messages}/> : <div>Hello</div> }
+
         </div>
       </SidebarInset>
     </SidebarProvider>

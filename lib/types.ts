@@ -21,3 +21,13 @@ export interface User {
     user: User;
   }
   
+ export interface Message {
+    id: number;
+    documentId: string;
+    content: string;
+    role: "user" | "assistant"; // Assuming role can be either 'user' or 'assistant'
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    session: Session;
+  }

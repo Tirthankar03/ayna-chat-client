@@ -1,4 +1,3 @@
-//need refinement=> all server component except the new chat button itself
 
 
 import { fetchUserSessions } from "@/lib/api";
@@ -9,7 +8,7 @@ export async function AppSidebar({ sessionId, ...props }) {
   // Fetch data server-side
   const sessions = await fetchUserSessions();
 
-  console.log("sessions>>>>", sessions)
+
   
   return (
     <Suspense fallback={<div>Loading...</div>}>

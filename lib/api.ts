@@ -53,8 +53,11 @@ export async function fetchUserSessions() {
 
 export async function getMessagesBySessionId(currentSessionId: string) {
   try {
-    const response = await fetch(`${API_URL}/api/messages?filters[session][id][$eq]=${currentSessionId}&populate=*`, {
+    const response = await fetch(`${API_URL}/api/sessions/${currentSessionId}?populate=*`, {
       method: "GET",
+      next: {
+        tags: ['message'],
+      },
       headers: {
         "Content-Type": "application/json",
       },
@@ -65,8 +68,8 @@ export async function getMessagesBySessionId(currentSessionId: string) {
     }
 
     const data = await response.json();
-    console.log("Messages:", data);
-    return data;
+    // console.log("Messages:", data.data.messages);
+    return data.data.messages;
   } catch (error) {
     console.error("Error fetching messages:", error);
   }
@@ -86,7 +89,7 @@ export async function getAllMessages() {
     }
 
     const data = await response.json();
-    console.log("All Messages:", data);
+    // console.log("All Messages:", data);
     return data;
   } catch (error) {
     console.error("Error fetching messages:", error);
