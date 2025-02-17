@@ -37,3 +37,47 @@ export async function fetchUserSessions() {
 }
 
 
+
+export async function getMessagesBySessionId(currentSessionId: string) {
+  try {
+    const response = await fetch(`${API_URL}/api/messages?filters[session][id][$eq]=${currentSessionId}&populate=*`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch messages");
+    }
+
+    const data = await response.json();
+    console.log("Messages:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+  }
+}
+
+export async function getAllMessages() {
+  try {
+    const response = await fetch(`${API_URL}/api/messages?populate=*`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch messages");
+    }
+
+    const data = await response.json();
+    console.log("All Messages:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+  }
+}
+
+

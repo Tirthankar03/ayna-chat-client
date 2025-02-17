@@ -39,7 +39,6 @@ export function AppSidebarClient({ sessions, ...props }: AppSidebarClientProps) 
 
         console.log("newSession>>>>>>", newSession)
         if (newSession?.data) {
-        //   setSessions(prev => [...prev, newSession.data]);
           setCurrentSession(newSession.data.id);
         }
       } catch (err) {
@@ -64,30 +63,6 @@ export function AppSidebarClient({ sessions, ...props }: AppSidebarClientProps) 
     });
   };
 
-//   const handleRenameSession = async (id: string, newTitle: string) => {
-//     startTransition(async () => {
-//       try {
-//         const response = await fetch(`/api/sessions/${id}`, {
-//           method: 'PUT',
-//           headers: { 'Content-Type': 'application/json' },
-//           body: JSON.stringify({ title: newTitle }),
-//         });
-        
-//         if (!response.ok) throw new Error('Failed to rename session');
-        
-//         setSessions(prev => 
-//           prev.map(session => 
-//             session.id === id 
-//               ? { ...session, title: newTitle }
-//               : session
-//           )
-//         );
-//         setEditDialogOpen(false);
-//       } catch (err) {
-//         setError('Failed to rename session');
-//       }
-//     });
-//   };
 
 const handleRenameSession = async (id: string, newTitle: string) => {
 
@@ -95,13 +70,6 @@ const handleRenameSession = async (id: string, newTitle: string) => {
     startTransition(async () => {
       try {
         await renameChatSession(id, newTitle);
-        // setSessions(prev => 
-        //   prev.map(session => 
-        //     session.id === id 
-        //       ? { ...session, title: newTitle }
-        //       : session
-        //   )
-        // );
         setEditDialogOpen(false);
       } catch (err) {
         setError('Failed to rename session');

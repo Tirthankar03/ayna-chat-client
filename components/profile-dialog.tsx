@@ -1,7 +1,8 @@
-'use client'
-import * as React from "react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+"use client";
+import * as React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "@/store/userSlice";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,28 +11,40 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { updateUserProfile } from "@/actions/user.actions";
 
 export function ProfileDialog() {
+  const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.user.user);
   const [formData, setFormData] = React.useState({
-    name: "Pedro Duarte",
-    username: "@peduarte"
-  })
+    username: user?.username || "",
+  });
+
+  const [isPending, startTransition] = React.useTransition();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [id]: value
-    }))
-  }
+    setFormData({ username: e.target.value });
+  };
+
+  const handleSaveChanges = () => {
+    startTransition(async () => {
+      try {
+        const updatedUser = await updateUserProfile(formData.username);
+        dispatch(setUser(updatedUser.data)); // Update Redux state
+        alert("Profile updated successfully!");
+      } catch (error) {
+        alert("Failed to update profile");
+      }
+    });
+  };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-            <p>Profile</p>
+        <p>Profile</p>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -42,32 +55,23 @@ export function ProfileDialog() {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input 
-              id="name" 
-              value={formData.name} 
-              onChange={handleInputChange}
-              className="col-span-3" 
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="username" className="text-right">
               Username
             </Label>
-            <Input 
-              id="username" 
-              value={formData.username} 
+            <Input
+              id="username"
+              value={formData.username}
               onChange={handleInputChange}
-              className="col-span-3" 
+              className="col-span-3"
             />
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button onClick={handleSaveChanges} disabled={isPending}>
+            {isPending ? "Saving..." : "Save changes"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-} 
+  );
+}
