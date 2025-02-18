@@ -28,7 +28,7 @@ interface PageProps {
 }
 
 export default async  function Page({searchParams} : any) {
-    const {id} =  searchParams;
+    const {id} = await searchParams;
 
     console.log("id>>>>", id)
 
