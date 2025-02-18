@@ -10,7 +10,13 @@ export async function middleware(request: NextRequest) {
 
   console.log("user>>>", user)
 
+
   const currentPath = request.nextUrl.pathname;
+
+
+  if (currentPath === "/") {
+    return NextResponse.redirect(new URL("/auth/signin", request.url));
+  }
 
   if (currentPath.startsWith("/chat") && user.ok === false) {
     return NextResponse.redirect(new URL("/auth/signin", request.url));

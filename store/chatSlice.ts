@@ -1,7 +1,14 @@
 // chatSlice.js
+import { Message } from '@/lib/types';
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {};
+
+interface ChatState {
+  [sessionId: string]: Message[]; 
+}
+const initialState: ChatState = {};
+
+
 
 const chatSlice = createSlice({
   name: 'chat',

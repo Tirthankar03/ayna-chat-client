@@ -25,7 +25,7 @@ import { LoadingSpinner } from "./spinner";
 
 interface AppSidebarClientProps extends React.ComponentProps<typeof Sidebar> {
   sessions: Session[];
-  currentSessionId: string;
+  currentSessionId?: string;
 }
 
 export function AppSidebarClient({

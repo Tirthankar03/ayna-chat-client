@@ -123,13 +123,19 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import MaxWidthWrapper from './MaxWidthWrapper';
 import { addMessage, setMessages } from '@/store/chatSlice';
 import { LoadingSpinner } from './spinner';
-import { User } from '@/lib/types';
+import { Message, User } from '@/lib/types';
+import { RootState } from '@/store';
 
 const socket = io("http://localhost:1337");
 
-export function ChatArea({ sessionId, messages }) {
+type ChatAreaProps = {
+  sessionId: string;
+  messages: Message[]
+}
+
+export function ChatArea({ sessionId, messages }: ChatAreaProps) {
   const dispatch = useDispatch();
-  const chatMessages = useSelector((state) => state.chat[sessionId] || []);
+  const chatMessages = useSelector((state: RootState) => state.chat[sessionId] || []);
   const user: User = useSelector((state: any) => state.user.user);
   const firstLetter = user.username?.charAt(0).toUpperCase();
 
@@ -137,7 +143,7 @@ export function ChatArea({ sessionId, messages }) {
   
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null); 
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -153,7 +159,7 @@ export function ChatArea({ sessionId, messages }) {
 
     socket.emit('joinSession', { sessionId });
 
-    const handleMessage = (newMessage) => {
+    const handleMessage = (newMessage: Message) => {
       dispatch(addMessage({ sessionId, message: newMessage }));
       if (newMessage.role === 'assistant') {
         setIsTyping(false);
@@ -171,7 +177,7 @@ export function ChatArea({ sessionId, messages }) {
     scrollToBottom();
   }, [chatMessages]);
 
-  const sendMessage = (e) => {
+  const sendMessage = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     if (!message.trim()) return;
 
@@ -186,7 +192,7 @@ export function ChatArea({ sessionId, messages }) {
     <MaxWidthWrapper>
       <div className="flex h-full flex-col">
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {chatMessages.map((m, index) => (
+          {chatMessages.map((m: Message, index: number) => (
             <div
               key={index}
               className={`flex items-start gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}

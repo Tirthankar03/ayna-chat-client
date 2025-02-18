@@ -12,7 +12,7 @@ const config = {
 export const dynamic = "force-dynamic"; // defaults to auto
 export async function GET(
   request: Request,
-  params: { params: { provider: string } }
+  params: any
 ) {
   const { searchParams } = new URL(request.url);
   const token = searchParams.get("access_token");

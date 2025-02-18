@@ -10,6 +10,7 @@ export async function fetchUserSessions() {
     const authToken = await getAuthToken();
     const userId = await extractUserDataFromToken();
 
+    if(!authToken || !userId ) return []
 
 
     const query = qs.stringify({

@@ -21,8 +21,14 @@ import { getMessagesBySessionId } from "@/lib/api"
 import AvatarUser from "@/components/AvatarUser"
 import Template from "@/components/Template"
 
-export default async  function Page({searchParams} : {searchParams: {id: string}}) {
-    const {id} = await searchParams;
+interface PageProps {
+  searchParams: {
+    id?: string;
+  };
+}
+
+export default async  function Page({searchParams} : any) {
+    const {id} =  searchParams;
 
     console.log("id>>>>", id)
 
