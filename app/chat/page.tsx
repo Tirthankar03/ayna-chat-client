@@ -2,25 +2,13 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import PlusButton from "@/components/plus-button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Plus, UserCircle, LogOut } from "lucide-react"
+import { Plus, UserCircle, LogOut, MessageCircle } from "lucide-react"
 import { ProfileDialog } from "@/components/profile-dialog"
 import { ChatArea } from "@/components/chat-area"
 import {
@@ -29,11 +17,28 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { LogoutButton } from "@/components/LogoutButton"
+import { getMessagesBySessionId } from "@/lib/api"
+import AvatarUser from "@/components/AvatarUser"
+import Template from "@/components/Template"
 
-export default function Page() {
+export default async  function Page({searchParams} : {searchParams: {id: string}}) {
+    const {id} = await searchParams;
+
+    console.log("id>>>>", id)
+
+let messages = [];
+if (id) {
+  try {
+    messages = await getMessagesBySessionId(id);
+  } catch (err) {
+    console.error("Error fetching messages:", err);
+    messages = []; // Fallback if there is an error
+  }
+}
+    // console.log("messages>>>>", messages)
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar sessionId={id}/>
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center justify-between gap-2 px-4">
           <div className="flex gap-2 items-center ">
@@ -42,14 +47,12 @@ export default function Page() {
             <PlusButton/>
           </div>
           
-          {/* <ProfileDialog /> */}
+
 
 
         <Popover>
           <PopoverTrigger>
-            <Avatar>
-              <AvatarFallback className="bg-primary/30 cursor-pointer">T</AvatarFallback>
-            </Avatar>
+            <AvatarUser/>
           </PopoverTrigger>
           <PopoverContent className="w-56">
             <div className="flex flex-col gap-3 ">
@@ -66,7 +69,8 @@ export default function Page() {
           
         </header>
         <div className="flex flex-1 flex-col">
-          <ChatArea />
+          {id != undefined ? <ChatArea sessionId={id} messages={messages}/> : <Template/> }
+
         </div>
       </SidebarInset>
     </SidebarProvider>

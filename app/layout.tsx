@@ -27,7 +27,7 @@ export default async function RootLayout({
   const userResponse = await getUserMeLoader();
   const initialUser = userResponse.ok ? userResponse.data : null;
 
-  // console.log('user in the api call>>>>>>', userResponse)
+  console.log('user in the api call>>>>>>', userResponse)
 
   return (
     <html lang="en">

@@ -33,7 +33,7 @@ export function ProfileDialog() {
     startTransition(async () => {
       try {
         const updatedUser = await updateUserProfile(formData.username);
-        dispatch(setUser(updatedUser.data)); // Update Redux state
+        // dispatch(setUser(updatedUser.data)); // Update Redux state
         alert("Profile updated successfully!");
       } catch (error) {
         alert("Failed to update profile");

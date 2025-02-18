@@ -10,9 +10,7 @@ export async function fetchUserSessions() {
     const authToken = await getAuthToken();
     const userId = await extractUserDataFromToken();
 
-    if (!userId) {
-      throw new Error("User data not found in token");
-    }
+
 
     const query = qs.stringify({
       populate: 'user',

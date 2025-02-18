@@ -8,15 +8,17 @@ export async function middleware(request: NextRequest) {
   
   const user = await getUserMeLoader();
 
+  console.log("user>>>", user)
+
   const currentPath = request.nextUrl.pathname;
 
-  // if (currentPath.startsWith("/chat") && user.ok === false) {
-  //   return NextResponse.redirect(new URL("/auth/signin", request.url));
-  // }
+  if (currentPath.startsWith("/chat") && user.ok === false) {
+    return NextResponse.redirect(new URL("/auth/signin", request.url));
+  }
 
-  // if (currentPath.startsWith("/auth/signin") && user.ok === true) {
-  //   return NextResponse.redirect(new URL("/chat", request.url));
-  // }
+  if (currentPath.startsWith("/auth/signin") && user.ok === true) {
+    return NextResponse.redirect(new URL("/chat", request.url));
+  }
 
 
 

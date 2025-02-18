@@ -1,8 +1,10 @@
 "use server"
 
+import { Session } from "@/lib/types";
 import { getAuthToken } from "@/services/get-auth-token";
 import { extractUserDataFromToken } from "@/services/token-data";
 import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:1337";
 
@@ -29,8 +31,12 @@ export async function createChatSession() {
         }
       }),
     });
+
+    const resp = await response.json()
+
+    const data: Session = resp.data
     
-    console.log("response>>>>>>>>>>", response)
+    console.log("response.json>>>>>>>>>>",data)
     
     
     if (!response.ok) {
@@ -39,7 +45,8 @@ export async function createChatSession() {
 
     revalidateTag('session');
     
-    return await response.json();
+
+    return data.documentId;
   } catch (error) {
     console.error("Error creating session:", error);
     throw error;

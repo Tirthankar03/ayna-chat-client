@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
+import chatReducer from "./chatSlice";
 import { persistReducer, persistStore } from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage'
 import {thunk} from 'redux-thunk';
@@ -32,6 +33,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     user: userReducer,
+    chat: chatReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
